@@ -1,70 +1,40 @@
-// 儲存使用者帳號和密碼的物件
-const users = {};
+// 获取所有需要用到的 HTML 元素
+const quantityInput = document.querySelector('#quantity');
+const colorSelect = document.querySelector('#color');
+const addCartBtn = document.querySelector('#add-to-cart');
+const totalSpan = document.querySelector('#total');
 
-// 註冊表單提交時的處理函式
-function handleRegister(event) {
-  event.preventDefault(); // 防止表單提交導致網頁重新載入
+// 定义单价和颜色对应的价格
+const price = {
+  'red': 1200,
+  'blue': 1300,
+  'green': 1400,
+  'yellow': 1500,
+};
 
-  // 獲取表單欄位的值
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+// 初始化数量和颜色
+let quantity = 1;
+let color = colorSelect.value;
 
-  // 檢查使用者名稱是否已被註冊
-  if (username in users) {
-    alert("使用者名稱已被註冊");
-    return;
-  }
-
-  // 將新使用者添加到 users 物件中
-  users[username] = password;
-
-  // 重設表單
-  event.target.reset();
+// 计算总价
+function calculateTotal() {
+  const totalPrice = price[color] * quantity;
+  totalSpan.textContent = `Total: ${totalPrice} NTD`;
 }
 
-// 登入表單提交時的處理函式
-function handleLogin(event) {
-  event.preventDefault(); // 防止表單提交導致網頁重新載入
+// 更新数量
+quantityInput.addEventListener('change', (event) => {
+  quantity = event.target.value;
+  calculateTotal();
+});
 
-  // 獲取表單欄位的值
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+// 更新颜色
+colorSelect.addEventListener('change', (event) => {
+  color = event.target.value;
+  calculateTotal();
+});
 
-  // 檢查使用者名稱和密碼是否正確
-  if (!(username in users) || users[username] !== password) {
-    alert("使用者名稱或密碼錯誤");
-    return;
-  }
-
-  // 登入成功，可以進行購物操作，這裡可以添加其他功能
-
-  // 重設表單
-  event.target.reset();
-}
-
-// 購買按鈕點擊時的處理函式
-function handleBuy(event) {
-  event.preventDefault(); // 防止表單提交導致網頁重新載入
-
-  // 獲取表單欄位的值，可以根據需要添加更多欄位
-  const quantity = document.getElementById("quantity").value;
-
-  // 處理購買操作，這裡可以添加其他功能
-
-  // 重設表單
-  event.target.reset();
-}
-
-// 獲取註冊表單和登入表單
-const registerForm = document.getElementById("register-form");
-const loginForm = document.getElementById("login-form");
-
-// 註冊表單和登入表單的 submit 事件綁定對應的處理函式
-registerForm.addEventListener("submit", handleRegister);
-loginForm.addEventListener("submit", handleLogin);
-
-// 獲取購買按鈕
-const buyButton = document.getElementById("buy-button");
-
-// 購買按鈕的 click 事件綁定對應的處理函式
-buyButton.addEventListener("click", handleBuy);
+// 添加到购物车
+addCartBtn.addEventListener('click', () => {
+  alert(`Added ${quantity} ${color} Merci+ to cart.`);
+});
